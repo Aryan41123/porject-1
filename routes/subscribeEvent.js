@@ -1,5 +1,5 @@
 const express = require("express");
-const Subscriber = require("../models/Subscriber.js");
+const Subscriber = require("../Models/Subscriber.js");
 
 const router = express.Router();
 
