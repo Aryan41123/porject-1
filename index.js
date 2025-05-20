@@ -13,7 +13,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use("/api/events", require("./routes/event.js"));
+app.use("/api/events", require("./routes/Event.js"));
 app.use("/api/subscribe", require("./routes/subscribeEvent.js"));
 
 app.get("/api/test-scrape", async (req, res) => {
