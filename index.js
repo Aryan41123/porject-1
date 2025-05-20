@@ -17,11 +17,17 @@ app.use("/api/events", require("./routes/event.js"));
 app.use("/api/subscribe", require("./routes/subscribeEvent.js"));
 
 app.get("/api/test-scrape", async (req, res) => {
-  const events = await scrapeEvents();
-  await Event.deleteMany({});
-  await Event.insertMany(events);
-  res.json({ message: "Scrape complete", count: events.length });
+  try {
+    const events = await scrapeEvents();
+    await Event.deleteMany({});
+    await Event.insertMany(events);
+    res.json({ message: "Scrape complete", count: events.length });
+  } catch (err) {
+    console.error("Scraping error:", err);
+    res.status(500).json({ message: "Internal server error", error: err.message });
+  }
 });
+
 
 app.get('/', () => {
   console.log("backend is running");
