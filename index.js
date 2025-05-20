@@ -7,7 +7,12 @@ const Event = require("./Models/Event.js");
 const cron = require("node-cron");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 connectDB();
