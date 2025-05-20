@@ -1,5 +1,5 @@
 const express = require("express");
-const Event = require("../models/Event.js");
+const Event = require("../Models/Event.js");
 
 const router = express.Router();
 

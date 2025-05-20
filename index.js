@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./MongodbConnect.js");
 const scrapeEvents = require("./Scraper/scraperEvent.js");
-const Event = require("./models/Event.js");
+const Event = require("./Models/Event.js");
 const cron = require("node-cron");
 
 const app = express();
