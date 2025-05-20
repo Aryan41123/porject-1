@@ -22,6 +22,9 @@ app.get("/api/test-scrape", async (req, res) => {
   await Event.insertMany(events);
   res.json({ message: "Scrape complete", count: events.length });
 });
+app.get('/go',()=>{
+  console.log("hello");
+})
 
 // Scheduled job: scrape every 6 hours
 cron.schedule("0 */6 * * *", async () => {
