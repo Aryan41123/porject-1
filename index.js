@@ -7,8 +7,23 @@ const Event = require("./Models/Event.js");
 const cron = require("node-cron");
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:5173' }));
+const allowedOrigins = [
+  'http://localhost:5173',           // your local frontend during dev
+  'https://my-app.vercel.app',       // your deployed frontend domain on Vercel
+];
 
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `CORS policy does not allow access from origin ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,  // if you are sending cookies or auth headers
+}));
 
 app.use(express.json());
 
