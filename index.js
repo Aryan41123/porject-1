@@ -10,11 +10,9 @@ const app = express();
 
 // ✅ CORS configuration
 app.use(cors({
-  origin: [
-    "http://localhost:5173", // local frontend
-    "https://your-frontend.vercel.app" // your deployed frontend domain
-  ]
+  origin: "http://localhost:5173", // Vite dev server
 }));
+
 app.use(express.json());
 
 // ✅ MongoDB Connection
