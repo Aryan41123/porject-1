@@ -18,7 +18,7 @@ const scrapeEvents = async () => {
             return {
               title: e.name,
               date: e.startDate,
-              link: e.url,
+              url: e.url,
               image: e.image,
               location: e.location?.name || "",
             };
