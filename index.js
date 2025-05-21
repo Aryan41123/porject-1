@@ -10,7 +10,7 @@ const app = express();
 
 // ✅ CORS configuration
 app.use(cors({
-  origin: "http://localhost:5173", // Vite dev server
+  origin: "https://event-scrap.onrender.com/", // Vite dev server
 }));
 
 app.use(express.json());
