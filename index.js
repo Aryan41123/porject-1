@@ -5,39 +5,40 @@ const connectDB = require("./MongodbConnect.js");
 const scrapeEvents = require("./Scraper/scraperEvent.js");
 const Event = require("./Models/Event.js");
 const cron = require("node-cron");
-
 const app = express();
+
+// ✅ Replace this with your actual frontend deployment URL
 const allowedOrigins = [
-  'http://localhost:5173',           // your local frontend during dev
-  'https://my-app.vercel.app',       // your deployed frontend domain on Vercel
+  "http://localhost:5173",               // Local development
+  "https://your-frontend.vercel.app"     // <-- Replace with your real frontend URL
 ];
 
+// ✅ CORS configuration
 app.use(cors({
-  origin: function(origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `CORS policy does not allow access from origin ${origin}`;
-      return callback(new Error(msg), false);
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    return callback(new Error("CORS not allowed for origin: " + origin), false);
   },
-  credentials: true,  // if you are sending cookies or auth headers
+  credentials: true
 }));
 
 app.use(express.json());
 
+// ✅ MongoDB Connection
 connectDB();
 
-// Routes
+// ✅ Routes
 app.use("/api/events", require("./routes/event.js"));
 app.use("/api/subscribe", require("./routes/subscribeEvent.js"));
 
-app.get('/', (req, res) => {
+// ✅ Test Route
+app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
 
-
+// ✅ Test Scrape Route
 app.get("/api/test-scrape", async (req, res) => {
   try {
     const events = await scrapeEvents();
@@ -50,13 +51,7 @@ app.get("/api/test-scrape", async (req, res) => {
   }
 });
 
-
-app.get('/', () => {
-  console.log("backend is running");
-})
-
-
-// Scheduled job: scrape every 6 hours
+// ✅ Scheduled job: scrape every 6 hours
 cron.schedule("0 */6 * * *", async () => {
   console.log("Running scheduled scrape...");
   try {
@@ -69,5 +64,6 @@ cron.schedule("0 */6 * * *", async () => {
   }
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
