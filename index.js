@@ -7,23 +7,14 @@ const Event = require("./Models/Event.js");
 const cron = require("node-cron");
 const app = express();
 
-// ✅ Replace this with your actual frontend deployment URL
-const allowedOrigins = [
-  "http://localhost:5173",               // Local development
-  "https://your-frontend.vercel.app"     // <-- Replace with your real frontend URL
-];
 
 // ✅ CORS configuration
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("CORS not allowed for origin: " + origin), false);
-  },
-  credentials: true
+  origin: [
+    "http://localhost:5173", // local frontend
+    "https://your-frontend.vercel.app" // your deployed frontend domain
+  ]
 }));
-
 app.use(express.json());
 
 // ✅ MongoDB Connection
