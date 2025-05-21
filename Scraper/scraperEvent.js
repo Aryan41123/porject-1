@@ -1,5 +1,4 @@
 const axios = require("axios");
-const cheerio = require("cheerio");
 
 const scrapeEvents = async () => {
   const url = "https://www.eventbrite.com.au/d/australia--sydney/events/";
@@ -7,25 +6,32 @@ const scrapeEvents = async () => {
   try {
     const { data } = await axios.get(url);
 
-    // Extract embedded JSON-LD structured data
-    const match = data.match(/<script type="application\/ld\+json">(.+?)<\/script>/s);
-    if (!match || !match[1]) return [];
+    const matches = [...data.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)];
 
-    const jsonText = match[1].trim();
-    const parsed = JSON.parse(jsonText);
+    for (const match of matches) {
+      try {
+        const json = JSON.parse(match[1].trim());
 
-    const events = parsed.itemListElement?.map((item) => {
-      const e = item.item;
-      return {
-        title: e.name,
-        date: e.startDate,
-        link: e.url,
-        image: e.image,
-        location: e.location?.name,
-      };
-    }) ?? [];
+        if (json.itemListElement) {
+          const events = json.itemListElement.map(item => {
+            const e = item.item;
+            return {
+              title: e.name,
+              date: e.startDate,
+              link: e.url,
+              image: e.image,
+              location: e.location?.name || "",
+            };
+          });
 
-    return events;
+          return events;
+        }
+      } catch (err) {
+        continue;
+      }
+    }
+
+    return [];
   } catch (err) {
     console.error("Error scraping Eventbrite:", err.message);
     return [];
