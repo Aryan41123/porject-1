@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const scrapeEvents = async () => {
-  const url = "https://www.eventbrite.com.au/d/australia--sydney/events/";
+  const url = "https://www.eventbrite.com.au/d/india--new-delhi/events/";
 
   try {
     const { data } = await axios.get(url);
