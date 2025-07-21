@@ -40,18 +40,20 @@ app.get("/api/test-scrape", async (req, res) => {
   }
 });
 
-// // ✅ Scheduled job: scrape every 6 hours
-// cron.schedule("0 */6 * * *", async () => {
-//   console.log("Running scheduled scrape...");
-//   try {
-//     const events = await scrapeEvents();
-//     await Event.deleteMany({});
-//     await Event.insertMany(events);
-//     console.log("Events updated");
-//   } catch (err) {
-//     console.error("Error scraping events", err);
-//   }
-// });
+
+
+// ✅ Scheduled job: scrape every 6 hours
+cron.schedule("0 */6 * * *", async () => {
+  console.log("Running scheduled scrape...");
+  try {
+    const events = await scrapeEvents();
+    await Event.deleteMany({});
+    await Event.insertMany(events);
+    console.log("Events updated");
+  } catch (err) {
+    console.error("Error scraping events", err);
+  }
+});
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
